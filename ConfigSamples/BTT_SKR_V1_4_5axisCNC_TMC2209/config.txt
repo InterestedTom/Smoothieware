@@ -1,0 +1,289 @@
+# Smoothieboard configuration file, see http://smoothieware.org/configuring-smoothie
+# NOTE Lines must not exceed 132 characters, and '#' characters mean what follows is ignored
+## Robot module configurations : general handling of movement G-codes and slicing into moves
+
+# Basic motion configuration
+default_feed_rate                            2400             # Default speed (mm/minute) for G1/G2/G3 moves
+default_seek_rate                            2400             # Default speed (mm/minute) for G0 moves
+mm_per_arc_segment                           0.0              # Fixed length for line segments that divide arcs, 0 to disable
+#mm_per_line_segment                         5                # Cut lines into segments this size
+mm_max_arc_error                             0.01             # The maximum error for line segments that divide arcs 0 to disable
+                                                              # note it is invalid for both the above be 0
+                                                              # if both are used, will use largest segment length based on radius
+
+# Arm solution configuration : Cartesian robot. Translates mm positions into stepper positions
+# See http://smoothieware.org/stepper-motors
+alpha_steps_per_mm                           80               # Steps per mm for alpha ( X ) stepper
+beta_steps_per_mm                            80               # Steps per mm for beta ( Y ) stepper
+gamma_steps_per_mm                           80               # Steps per mm for gamma ( Z ) stepper
+delta_steps_per_mm			     10		      # Steps per degree
+epsilon_steps_per_mm			     10		      # Steps per degree
+
+# Planner module configuration : Look-ahead and acceleration configuration
+# See http://smoothieware.org/motion-control
+acceleration                                 3000             # Acceleration in mm/second/second.
+#z_acceleration                              500              # Acceleration for Z only moves in mm/s^2, 0 uses acceleration which is the default. DO NOT SET ON A DELTA
+junction_deviation                           0.05             # See http://smoothieware.org/motion-control#junction-deviation
+#z_junction_deviation                        0.0              # For Z only moves, -1 uses junction_deviation, zero disables junction_deviation on z moves DO NOT SET ON A DELTA
+
+# Cartesian axis speed limits
+x_axis_max_speed                             12000            # Maximum speed in mm/min
+y_axis_max_speed                             12000            # Maximum speed in mm/min
+z_axis_max_speed                             12000            # Maximum speed in mm/min
+
+# Stepper module configuration
+# Pins are defined as  ports, and pin numbers, appending "!" to the number will invert a pin
+# See http://smoothieware.org/pin-configuration and http://smoothieware.org/pinout
+alpha_step_pin                               2.2              # Pin for alpha stepper step signal
+alpha_dir_pin                                2.6              # Pin for alpha stepper direction, add '!' to reverse direction
+alpha_en_pin                                 2.1              # Pin for alpha enable pin
+alpha_current                                0.4              # X stepper motor current
+alpha_max_rate                               30000.0          # Maximum rate in mm/min
+
+beta_step_pin                                0.19             # Pin for beta stepper step signal
+beta_dir_pin                                 0.20             # Pin for beta stepper direction, add '!' to reverse direction
+beta_en_pin                                  2.8              # Pin for beta enable
+beta_current                                 0.4              # Y stepper motor current
+beta_max_rate                                30000.0          # Maxmimum rate in mm/min
+
+gamma_step_pin                               0.22             # Pin for gamma stepper step signal
+gamma_dir_pin                                2.11             # Pin for gamma stepper direction, add '!' to reverse direction
+gamma_en_pin                                 0.21             # Pin for gamma enable
+gamma_current                                0.4              # Z stepper motor current
+gamma_max_rate                               30000.0          # Maximum rate in mm/min
+
+delta_step_pin				     2.13
+delta_dir_pin				     0.11
+delta_en_pin				     2.12
+delta_current				     0.4
+delta_max_rate				     36000.0
+
+epsilon_step_pin			     1.15
+epsilon_dir_pin				     1.14
+epsilon_en_pin				     1.16
+epsilon_current				     0.4
+epsilon_max_rate			     36000.0
+
+## Laser module configuration
+# See http://smoothieware.org/laser
+laser_module_enable                           false           # Whether to activate the laser module at all
+laser_module_pwm_pin                          2.5             # This pin will be PWMed to control the laser.
+                                                              # Only pins 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 1.18, 1.20, 1.21, 1.23, 1.24, 1.26, 3.25 and 3.26
+                                                              # can be used since laser requires hardware PWM, see http://smoothieware.org/pinout
+#laser_module_ttl_pin 	                      1.30            # This pin turns on when the laser turns on, and off when the laser turns off.
+#laser_module_maximum_power                   1.0             # This is the maximum duty cycle that will be applied to the laser
+#laser_module_minimum_power                   0.0             # This is a value just below the minimum duty cycle that keeps the laser
+                                                              # active without actually burning.
+#laser_module_default_power                   0.8             # This is the default laser power that will be used for cuts if a power has not been specified.  The value is a scale between
+                                                              # the maximum and minimum power levels specified above
+#laser_module_pwm_period                      20              # This sets the pwm frequency as the period in microseconds
+
+
+## Switch modules
+# See http://smoothieware.org/switch
+
+# Switch module for fan control
+switch.fan.enable                            false            # Enable this module
+switch.fan.input_on_command                  M106             # Command that will turn this switch on
+switch.fan.input_off_command                 M107             # Command that will turn this switch off
+switch.fan.output_pin                        2.6              # Pin this module controls
+switch.fan.output_type                       pwm              # PWM output settable with S parameter in the input_on_comand
+#switch.fan.max_pwm                          255              # Set max pwm for the pin default is 255
+
+#switch.misc.enable                          false            # Enable this module
+#switch.misc.input_on_command                M42              # Command that will turn this switch on
+#switch.misc.input_off_command               M43              # Command that will turn this switch off
+#switch.misc.output_pin                      2.4              # Pin this module controls
+#switch.misc.output_type                     digital          # Digital means this is just an on or off pin
+
+#switch.bltouch.enable                    false        #
+#switch.bltouch.output_pin                2.4          # sw pwm can use any digital pin
+#switch.bltouch.input_on_command          M280         #
+#switch.bltouch.input_off_command         M281         #
+#switch.bltouch.output_type               swpwm        # sw pwm must be low frequency
+#switch.bltouch.pwm_period_ms             20           # 50Hz
+#switch.bltouch.startup_state             false        # start up in the stow state
+#switch.bltouch.startup_value             7.43         # On boot it will go into stow mode, also set with the M281
+#switch.bltouch.default_on_value          3.3          # if M280 is issued without S this is the value it will set it to
+
+## Endstops new syntax
+endstop.minx.enable			     true
+endstop.minx.pin			     1.29^
+endstop.minx.limit_enable		     true
+endstop.minx.axis			     X
+
+endstop.maxx.enable			     true
+endstop.maxx.pin			     1.29^
+endstop.maxx.limit_enable		     true
+endstop.maxx.axis			     X
+
+endstop.miny.enable			     true
+endstop.miny.pin			     1.28^
+endstop.miny.limit_enable		     true
+endstop.miny.axis			     Y
+
+endstop.maxy.enable			     true
+endstop.maxy.pin			     1.28^
+endstop.maxy.limit_enable		     true
+endstop.maxy.axis			     Y
+
+endstop.minz.enable			     true
+endstop.minz.pin			     1.27^
+endstop.minz.limit_enable		     true
+endstop.minz.axis			     Z
+
+endstop.maxz.enable			     true
+endstop.maxz.pin			     1.27^
+endstop.maxz.limit_enable		     true
+endstop.maxz.axis			     Z
+
+endstop.mina.enable			     true
+endstop.mina.pin			     1.26^
+endstop.mina.limit_enable		     true
+endstop.mina.axis			     A
+
+endstop.maxa.enable			     true
+endstop.maxa.pin			     1.26^
+endstop.maxa.limit_enable		     true
+endstop.maxa.axis			     A
+
+endstop.minb.enable			     true
+endstop.minb.pin			     1.25^
+endstop.minb.limit_enable		     true
+endstop.minb.axis			     B
+
+endstop.maxb.enable			     true
+endstop.maxb.pin			     1.25^
+endstop.maxb.limit_enable		     true
+endstop.maxb.axis			     B
+
+# End of endstop config
+
+## Z-probe
+# See http://smoothieware.org/zprobe
+zprobe.enable                                true            # Set to true to enable a zprobe
+zprobe.probe_pin                             0.10^           # Pin probe is attached to, if NC remove the !
+zprobe.slow_feedrate                         5               # Mm/sec probe feed rate
+#zprobe.debounce_ms                          1               # Set if noisy
+zprobe.fast_feedrate                         100             # Move feedrate mm/sec
+zprobe.probe_height                          5               # How much above bed to start probe
+
+# Levelling strategy
+# Example for 3-point levelling strategy, see wiki documentation for other strategies
+#leveling-strategy.three-point-leveling.enable         true        # a leveling strategy that probes three points to define a plane and keeps the Z parallel to that plane
+#leveling-strategy.three-point-leveling.point1         100.0,0.0   # the first probe point (x,y) optional may be defined with M557
+#leveling-strategy.three-point-leveling.point2         200.0,200.0 # the second probe point (x,y)
+#leveling-strategy.three-point-leveling.point3         0.0,200.0   # the third probe point (x,y)
+#leveling-strategy.three-point-leveling.home_first     true        # home the XY axis before probing
+#leveling-strategy.three-point-leveling.tolerance      0.03        # the probe tolerance in mm, anything less that this will be ignored, default is 0.03mm
+#leveling-strategy.three-point-leveling.probe_offsets  0,0,0       # the probe offsets from nozzle, must be x,y,z, default is no offset
+#leveling-strategy.three-point-leveling.save_plane     false       # set to true to allow the bed plane to be saved with M500 default is false
+
+## Panel
+# See http://smoothieware.org/panel
+# Please find your panel on the wiki and copy/paste the right configuration here
+panel.enable                                 false             # Set to true to enable the panel code
+
+# Example for reprap discount GLCD
+# on glcd EXP1 is to left and EXP2 is to right, pin 1 is bottom left, pin 2 is top left etc.
+# +5v is EXP1 pin 10, Gnd is EXP1 pin 9
+#panel.lcd                                   reprap_discount_glcd     #
+#panel.spi_channel                           0                 # SPI channel to use  ; GLCD EXP1 Pins 3,5 (MOSI, SCLK)
+#panel.spi_cs_pin                            0.16              # SPI chip select     ; GLCD EXP1 Pin 4
+#panel.encoder_a_pin                         3.25!^            # Encoder pin         ; GLCD EXP2 Pin 3
+#panel.encoder_b_pin                         3.26!^            # Encoder pin         ; GLCD EXP2 Pin 5
+#panel.click_button_pin                      1.30!^            # Click button        ; GLCD EXP1 Pin 2
+#panel.buzz_pin                              1.31              # Pin for buzzer      ; GLCD EXP1 Pin 1
+#panel.back_button_pin                       2.11!^            # Back button         ; GLCD EXP2 Pin 8
+
+## Custom menus : Example of a custom menu entry, which will show up in the Custom entry.
+# NOTE _ gets converted to space in the menu and commands, | is used to separate multiple commands
+custom_menu.power_on.enable                false             #
+custom_menu.power_on.name                  Power_on          #
+custom_menu.power_on.command               M80               #
+
+custom_menu.power_off.enable               false             #
+custom_menu.power_off.name                 Power_off         #
+custom_menu.power_off.command              M81               #
+
+
+## Network settings
+# See http://smoothieware.org/network
+network.enable                               false            # Enable the ethernet network services
+network.webserver.enable                     true             # Enable the webserver
+network.telnet.enable                        true             # Enable the telnet server
+network.ip_address                           auto             # Use dhcp to get ip address
+# Uncomment the 3 below to manually setup ip address
+#network.ip_address                           192.168.3.222   # The IP address
+#network.ip_mask                              255.255.255.0   # The ip mask
+#network.ip_gateway                           192.168.3.1     # The gateway address
+#network.mac_override                         xx.xx.xx.xx.xx.xx  # Override the mac address, only do this if you have a conflict
+
+## System configuration
+# Serial communications configuration ( baud rate defaults to 9600 if undefined )
+# For communication over the UART port, *not* the USB/Serial port
+uart0.baud_rate                              115200           # Baud rate for the default hardware ( UART ) serial port
+
+second_usb_serial_enable                     false            # This enables a second USB serial port
+#leds_disable                                true             # Disable using leds after config loaded
+#play_led_disable                            true             # Disable the play led
+
+# Kill button maybe assigned to a different pin, set to the onboard pin by default
+# See http://smoothieware.org/killbutton
+kill_button_enable                           true             # Set to true to enable a kill button
+kill_button_pin                              2.12             # Kill button pin. default is same as pause button 2.12 (2.11 is another good choice)
+
+#msd_disable                                 false            # Disable the MSD (USB SDCARD), see http://smoothieware.org/troubleshooting#disable-msd
+#dfu_enable                                  false            # For linux developers, set to true to enable DFU
+
+# Only needed on a smoothieboard
+# See http://smoothieware.org/currentcontrol
+currentcontrol_module_enable                 false            # Control stepper motor current via the configuration file
+
+## Motor driver configuration
+motor_driver_control.enable                  true            # Enable module
+
+motor_driver_control.alpha.enable	     true
+motor_driver_control.alpha.axis		     X
+motor_driver_control.alpha.chip		     TMC2209
+motor_driver_control.alpha.sw_uart_tx_pin    1.10
+motor_driver_control.alpha.sw_uart_rx_pin    1.10
+motor_driver_control.alpha.current	     400
+motor_driver_control.alpha.sense_resistor    110
+motor_driver_control.alpha.microsteps	     256
+
+motor_driver_control.beta.enable	     true
+motor_driver_control.beta.axis		     Y
+motor_driver_control.beta.chip		     TMC2209
+motor_driver_control.beta.sw_uart_tx_pin     1.9
+motor_driver_control.beta.sw_uart_rx_pin     1.9
+motor_driver_control.beta.current	     400
+motor_driver_control.beta.sense_resistor     110
+motor_driver_control.beta.microsteps	     256
+
+motor_driver_control.gamma.enable	     true
+motor_driver_control.gamma.axis		     Z
+motor_driver_control.gamma.chip		     TMC2209
+motor_driver_control.gamma.sw_uart_tx_pin    1.8
+motor_driver_control.gamma.sw_uart_rx_pin    1.8
+motor_driver_control.gamma.current	     400
+motor_driver_control.gamma.sense_resistor    110
+motor_driver_control.gamma.microsteps	     256
+
+motor_driver_control.delta.enable	     true
+motor_driver_control.delta.axis		     A
+motor_driver_control.delta.chip		     TMC2209
+motor_driver_control.delta.sw_uart_tx_pin    1.4
+motor_driver_control.delta.sw_uart_rx_pin    1.4
+motor_driver_control.delta.current	     400
+motor_driver_control.delta.sense_resistor    110
+motor_driver_control.delta.microsteps	     256
+
+motor_driver_control.gamma.enable	     true
+motor_driver_control.gamma.axis		     B
+motor_driver_control.gamma.chip		     TMC2209
+motor_driver_control.gamma.sw_uart_tx_pin    1.1
+motor_driver_control.gamma.sw_uart_rx_pin    1.1
+motor_driver_control.gamma.current	     400
+motor_driver_control.gamma.sense_resistor    110
+motor_driver_control.gamma.microsteps	     256
